@@ -103,7 +103,7 @@
         android:hint="Password"
         android:textColorHint="#3F51B5"
         android:background="@drawable/et_fondo"
-        android:inputType="textPersonName"
+        android:inputType="textPassword"
         android:textStyle="bold"
         android:textAlignment="center"
         android:paddingLeft="20dp"
