@@ -12,36 +12,33 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.mika.loginsharepreference.R;
+import com.mika.loginsharepreference.databinding.ActivityRegistroBinding;
 import com.mika.loginsharepreference.model.Usuario;
 
 public class RegistroActivity extends AppCompatActivity {
 
     private ViewModelRegistro vmr;
-    private EditText etDni, etApellido, etNombre, etEmail, etPassword;
-    private Button btnGuardar;
+    private ActivityRegistroBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registro);
+        binding= ActivityRegistroBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         inicializar();
     }
 
     private void inicializar() {
         vmr= ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(ViewModelRegistro.class);
-        this.etDni= findViewById(R.id.etDni);
-        this.etApellido= findViewById(R.id.etApellido);
-        this.etNombre= findViewById(R.id.etNombre);
-        this.etEmail= findViewById(R.id.etCorreo);
-        this.etPassword= findViewById(R.id.etPassword);
-        this.btnGuardar= findViewById(R.id.btnGuardar);
+
         vmr.getUsuario().observe(this, new Observer<Usuario>() {
             @Override
             public void onChanged(Usuario usuario) {
-                etDni.setText(usuario.getDni()+"");
-                etApellido.setText(usuario.getApellido());
-                etNombre.setText(usuario.getNombre());
-                etEmail.setText(usuario.getMail());
-                etPassword.setText(usuario.getPassword());
+                binding.etDni.setText(usuario.getDni()+"");
+                binding.etApellido.setText(usuario.getApellido());
+                binding.etNombre.setText(usuario.getNombre());
+                binding.etCorreo.setText(usuario.getMail());
+                binding.etPassword.setText(usuario.getPassword());
             }
         });
         vmr.getMensaje().observe(this, new Observer<String>() {
@@ -50,10 +47,14 @@ public class RegistroActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),s,Toast.LENGTH_LONG).show();
             }
         });
-        btnGuardar.setOnClickListener(new View.OnClickListener() {
+        binding.btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                vmr.registrar(etDni.getText().toString(), etApellido.getText().toString(), etNombre.getText().toString(),etEmail.getText().toString(), etPassword.getText().toString());
+                vmr.registrar(binding.etDni.getText().toString(),
+                        binding.etApellido.getText().toString(),
+                        binding.etNombre.getText().toString(),
+                        binding.etCorreo.getText().toString(),
+                        binding.etPassword.getText().toString());
             }
         });
         vmr.mostrar((Usuario) getIntent().getSerializableExtra("usuario"));
